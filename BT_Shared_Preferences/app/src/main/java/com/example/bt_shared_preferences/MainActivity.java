@@ -20,6 +20,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AnhXa();
+
+        sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
+
+        //lấy giá trị
+        edtUsername.setText(sharedPreferences.getString("taikhoan",""));
+        edtPassword.setText(sharedPreferences.getString("matkhau",""));
+        cbRemember.setChecked(sharedPreferences.getBoolean("checked", false));
+
         btnXacNhan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -27,6 +35,20 @@ public class MainActivity extends AppCompatActivity {
                 String password = edtPassword.getText().toString().trim();
                 if(username.equals("tiencuong")&& password.equals("1234")){
                     Toast.makeText(MainActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                    //nếu có check
+                    if(cbRemember.isChecked()){
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("taikhoan", username);
+                        editor.putString("matkhau", password);
+                        editor.putBoolean("checked",true);
+                        editor.commit();
+                    }else {
+                        SharedPreferences.Editor editor =sharedPreferences.edit();
+                        editor.remove("taikhoan");
+                        editor.remove("matkhau");
+                        editor.remove("checked");
+                        editor.commit();
+                    }
                 }else {
                     Toast.makeText(MainActivity.this, "Lỗi đăng nhập", Toast.LENGTH_SHORT).show();
                 }
